@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+      @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700;800&display=swap');
+      body {
+          font-family: "Open Sans", sans-serif;
+          display: grid;
+          grid-auto-flow: row;
+          justify-items: center;
+      }
+      .create-tweet {
+          margin-top: 45px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+      .create-tweet textarea {
+          border: none;
+          outline-color: dodgerblue;
+          border-radius: 20px;
+          border: 0;
+          height: 40px;
+          width: 150px;
+          background-color: #999;
+          padding: 10px;
+          min-height: 50px;
+          font-family: "Open Sans", sans-serif;
+          margin-right: 20px;
+          max-width: 400px;
+          max-height: 500px;
+          color: white;
+      }
+      .create-tweet textarea::placeholder {
+          color: white;
+          font-weight: 800;
+      }
+      .create-tweet input[type=submit] {
+          border: 4px solid dodgerblue;
+          border-radius: 20px;
+          height: 30px;
+          width: 100px;
+          color: dodgerblue;
+          font-weight: 800;
+          transition: transform 300ms, background-color 300ms, color 300ms;
+      }
+      .create-tweet input[type=submit]:hover {
+          transform: scale(1.1);
+      }
+      .create-tweet input[type=submit]:active {
+          background-color: dodgerblue;
+          color: white;
+      }
+      h1 {
+          font-weight: 800;
+          font-size: 35px;
+          font-variant: small-caps;
+          text-transform: lowercase;
+          position: relative;
+      }
+      h1:after {
+          content: "";
+          position: absolute;
+          height: 3.5px;
+          max-width: 200%;
+          width: auto;
+          left: -50%;
+          border-radius: 3px;
+          background-color: black;
+          bottom: -15px;
+      }
+      .twit {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin: 0 auto;
+          max-width: 1500px;
+          padding: 0;
+          font-size: 18px;
+      }
+      .twit li {
+          max-width: 500px;
+          position: relative;
+          display: block;
+          font-weight: 400;
+          flex: 1 0 300px;
+          margin: 10px;
+          padding: 50px 30px 50px;
+          border-radius: 20px;
+          color: white;
+          background: dodgerblue;
+          overflow: hidden;
+      }
+      .twit_date {
+          font-weight: 400;
+          font-size: 15px;
+          position: absolute;
+          bottom: 15px;
+          right: 20px;
+          text-align: right;
+      }
+      p {
+          margin: 0;
+      }
+      .button_close, .edit {
+          position: absolute;
+          font-size: 15px;
+          cursor: pointer;
+          opacity: 0;
+          transition: 300ms opacity;
+          top: 15px;
+      }
+      .button_close {
+          right: 20px;
+      }
+      .edit {
+          right: 45px;
+      }
+      .twit li:hover .button_close,
+      .twit li:hover .edit {
+          opacity: 1;
+      }
+      .open_close {
+          margin: 0;
+          display: grid;
+          place-content: center;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0, 0.7);
+          opacity: 0;
+          visibility: hidden;
+      }
+      ._open_close-shown {
+          opacity: 1;
+          visibility: visible;
+          transition: opacity 300ms;
+      }
+      ._open_close-hidden {
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 300ms, visibility 0ms 300ms;
+      }
+      .open_close input {
+          border-radius: 10px;
+          border: 0;
+          font-weight: 700;
+          font-size: 18px;
+          height: 50px;
+          cursor: pointer;
+          transition: background-color 300ms;
+      }
+      .open_close .button_yes:hover {
+        background-color: #800020;
+      }
+      .open_close .button_no:hover {
+          background-color: #999;
+      }
+      .open_close div {
+          text-align: center;
+      }
+      .open_close p {
+          font-weight: 700;
+          max-width: 350px;
+          margin-bottom: 10px;
+      }
+      .button_yes {
+          color: white;
+          width: 100px;
+          background: #C41E3A;
+      }
+      .button_no {
+          width: 70px;
+      }
+      .delete {
+          display: none;
+      }
+  </style>
+</head>
+<body>
+<form class="create-tweet">
+  <textarea name="tweet" cols="30" rows="5" placeholder="Tweet something..."></textarea>
+  <input type="submit" value="Tweet me!"/>
+</form>
+<h1>List of tweets</h1>
+<ul class="twit">
+  <% @tweets.each do |tweet| %>
+    <li>
+      <p class="twit_text"><%= tweet[:text]%></p>
+      <p class="twit_date"><%= tweet[:time] %></p>
+      <i class="button_close far fa-trash-alt"></i>
+      <i class="edit far fa-edit"></i>
+      <form class="open_close _open_close-hidden">
+        <div>
+          <p>Do you really want to delete this twit?</p>
+          <input type="button" name="no" class="button_no" value="No">
+          <input type="submit" name="button_yes" class="button_yes" value="Yes">
+          <input type="text" name="delete" class="delete" value="<%= tweet[:index] %>">
+        </div>
+      </form>
+    </li>
+  <% end %>
+</ul>
+</body>
+<script src="https://kit.fontawesome.com/a63dda7a48.js" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+  const CLOSE_BTN = Array.from(document.getElementsByClassName('button_close'));
+  const NO_BTN = Array.from(document.getElementsByClassName('button_no'));
+  const FORMS = Array.from(document.getElementsByClassName('open_close'));
+
+  CLOSE_BTN.forEach(element => element.onclick = function () {
+      let n = CLOSE_BTN.indexOf(element)
+      FORMS[n].classList.toggle('_open_close-shown');
+      FORMS[n].classList.toggle('_open_close-hidden');
+      console.log('Hey!')
+  });
+  NO_BTN.forEach(element => element.onclick = function () {
+      let n = NO_BTN.indexOf(element)
+      FORMS[n].classList.toggle('_open_close-shown');
+      FORMS[n].classList.toggle('_open_close-hidden');
+      console.log('Hey!')
+  });
+</script>
+</html>
